@@ -1,9 +1,12 @@
 package com.example.testgenerator;
 
 import java.io.IOException;
+
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.json.JSONObject;
 
+@Slf4j
 public class OpenAIClient {
 
     private static final String API_KEY = "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";
