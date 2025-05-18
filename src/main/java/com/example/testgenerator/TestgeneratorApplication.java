@@ -16,11 +16,15 @@ import io.github.classgraph.ScanResult;
 public class TestgeneratorApplication {
 
 	public static void main(String[] args) throws IOException {
-		String packageName = "com.example.testgenerator.service";
+		String basePackage = "com.example.testgenerator.app";
+
 		try (ScanResult scanResult = new ClassGraph()
-				.acceptPackages(packageName)
+				.acceptPackages(basePackage) // Scans basePackage and all its subpackages
+				.enableClassInfo()
 				.scan()) {
+
 			List<Class<?>> classes = scanResult.getAllClasses().loadClasses();
+
 			for (Class<?> clazz : classes) {
 				List<Method> publicMethods = MethodScanner.getPublicMethods(clazz);
 				log.info("PublicMethods in {}: {}", clazz.getSimpleName(), publicMethods);
@@ -34,6 +38,7 @@ public class TestgeneratorApplication {
 					log.info("GeneratedTest: {}", generatedTest);
 					generatedTestList.add(generatedTest);
 				}
+
 				TestFileWriter.writeTestFile(clazz.getSimpleName(), generatedTestList);
 			}
 		}

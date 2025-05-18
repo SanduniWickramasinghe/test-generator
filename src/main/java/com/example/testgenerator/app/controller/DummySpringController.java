@@ -1,6 +1,6 @@
-package com.example.testgenerator.controller;
+package com.example.testgenerator.app.controller;
 
-import com.example.testgenerator.service.DummySpringService;
+import com.example.testgenerator.app.service.DummySpringService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

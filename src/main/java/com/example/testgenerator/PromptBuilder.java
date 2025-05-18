@@ -9,4 +9,9 @@ public class PromptBuilder {
                 + method.toString() + "\n\n"
                 + "Include necessary mocks using Mockito.";
     }
+
+    public static String buildRefactorPrompt(String content){
+        return "Refactor this class with proper import structure and brackets. Append all methods in proper places:\n\n"
+                + content;
+    }
 }

@@ -45,4 +45,37 @@ public class OpenAIClient {
         }
     }
 
+    public static String refactorTestCode(String prompt) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+
+        JSONObject message = new JSONObject()
+                .put("role", "user")
+                .put("content", prompt);
+
+        JSONObject payload = new JSONObject()
+                .put("model", "gpt-3.5-turbo")
+                .put("messages", new org.json.JSONArray().put(message))
+                .put("temperature", 0.3);
+
+        RequestBody body = RequestBody.create(
+                MediaType.parse("application/json"),
+                payload.toString()
+        );
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(body)
+                .addHeader("Authorization", "Bearer " + API_KEY)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Unexpected response: " + response);
+            }
+            String responseBody = response.body().string();
+            return OpenAIResponseParser.extractContent(responseBody);
+        }
+    }
+
 }

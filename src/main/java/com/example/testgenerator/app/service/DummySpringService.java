@@ -1,4 +1,4 @@
-package com.example.testgenerator.service;
+package com.example.testgenerator.app.service;
 
 import org.springframework.stereotype.Service;
 
