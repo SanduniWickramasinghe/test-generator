@@ -1,4 +1,4 @@
-package com.example.testgenerator;
+package com.example.testgenerator.service;
 
 import org.springframework.stereotype.Service;
 
@@ -11,5 +11,9 @@ public class DummySpringService {
 
     public String getNumber(Integer number) {
         return String.valueOf(number);
+    }
+
+    public Object getObj(){
+        return null;
     }
 }
