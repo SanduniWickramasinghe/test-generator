@@ -12,7 +12,7 @@ import java.util.Set;
 @Slf4j
 public class TestFileWriter {
 
-    private static final String PACKAGE_LINE = "package com.example.generated;\n\n";
+    private static final String PACKAGE_LINE = "package com.example.testgenerator;\n\n";
     private static final List<String> IMPORTS = List.of(
             "import org.junit.jupiter.api.Test;",
             "import static org.junit.jupiter.api.Assertions.*;",
@@ -20,7 +20,7 @@ public class TestFileWriter {
     );
 
     public static void writeTestFile(String className, List<String> testMethodContents) throws IOException {
-        String directoryPath = "src/test/java/com/example/generated/";
+        String directoryPath = "src/test/java/com/example/testgenerator/";
         String testFileName = className + "Test.java";
         File directory = new File(directoryPath);
         if (!directory.exists()) {
@@ -51,6 +51,44 @@ public class TestFileWriter {
                 contentBuilder.append(methodContent).append("\n\n");
             }
         }
+
+        contentBuilder.append("}");
+        try (FileWriter writer = new FileWriter(file)) {
+            String prompt = PromptBuilder.buildRefactorPrompt(contentBuilder.toString());
+            log.info("Start refactoring the code. Prompt : {}", prompt);
+            String refactoredContent = OpenAIClient.refactorTestCode(prompt);
+            writer.write(refactoredContent);
+        }
+
+        log.info("Test written to: {}", file.getAbsolutePath());
+    }
+
+    public static void writeTestFileForOpenAPI(String className, String testMethodContents) throws IOException {
+        String directoryPath = "src/test/java/com/example/generated/";
+        String testFileName = className + "Test.java";
+        File directory = new File(directoryPath);
+        if (!directory.exists()) {
+            if (!directory.mkdirs()) {
+                throw new IOException("Failed to create directory: " + directoryPath);
+            }
+        }
+
+        File file = new File(directoryPath + testFileName);
+
+        // Delete the file if it already exists
+        if (file.exists() && !file.delete()) {
+            throw new IOException("Failed to delete existing test file: " + file.getAbsolutePath());
+        }
+
+        StringBuilder contentBuilder = new StringBuilder();
+
+        // Append package and import statements
+        contentBuilder.append(PACKAGE_LINE);
+        IMPORTS.forEach(importLine -> contentBuilder.append(importLine).append("\n"));
+        contentBuilder.append("\npublic class ").append(className).append("Test {\n\n");
+
+        Set<String> methodNames = new HashSet<>();
+        contentBuilder.append(testMethodContents).append("\n\n");
 
         contentBuilder.append("}");
 

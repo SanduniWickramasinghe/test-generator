@@ -36,6 +36,9 @@ dependencies {
 
 	implementation("io.github.classgraph:classgraph:4.8.179")
 
+	implementation 'io.swagger.parser.v3:swagger-parser:2.1.12'
+
+
 }
 
 tasks.named('test') {

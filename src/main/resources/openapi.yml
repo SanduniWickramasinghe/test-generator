@@ -1,0 +1,67 @@
+openapi: 3.0.3
+info:
+  title: Dummy Spring API
+  description: Simple API with greet, number, and customer endpoints
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+
+paths:
+  /greet:
+    get:
+      summary: Greet a user by name
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Name to greet
+      responses:
+        '200':
+          description: Successful greeting
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /number:
+    get:
+      summary: Echo a number
+      parameters:
+        - name: number
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: A number to process
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /customer:
+    get:
+      summary: Get a customer object
+      responses:
+        '200':
+          description: Customer object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: John Doe

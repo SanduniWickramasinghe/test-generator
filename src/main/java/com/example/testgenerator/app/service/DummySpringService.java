@@ -1,5 +1,6 @@
 package com.example.testgenerator.app.service;
 
+import com.example.testgenerator.app.model.Customer;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +14,10 @@ public class DummySpringService {
         return String.valueOf(number);
     }
 
-    public Object getObj(){
-        return null;
+    public Customer getCustomer(){
+        return Customer.builder()
+                .id(1)
+                .name("UOP User")
+                .build();
     }
 }

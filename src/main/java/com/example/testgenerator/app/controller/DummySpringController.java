@@ -1,5 +1,6 @@
 package com.example.testgenerator.app.controller;
 
+import com.example.testgenerator.app.model.Customer;
 import com.example.testgenerator.app.service.DummySpringService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,5 +23,10 @@ public class DummySpringController {
     @GetMapping("/number")
     public String getNumber(@RequestParam Integer number) {
         return dummySpringService.getNumber(number);
+    }
+
+    @GetMapping("/customer")
+    public Customer getCustomer(){
+        return dummySpringService.getCustomer();
     }
 }

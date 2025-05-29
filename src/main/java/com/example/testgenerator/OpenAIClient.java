@@ -46,6 +46,7 @@ public class OpenAIClient {
     }
 
     public static String refactorTestCode(String prompt) throws IOException {
+
         OkHttpClient client = new OkHttpClient();
 
         JSONObject message = new JSONObject()
