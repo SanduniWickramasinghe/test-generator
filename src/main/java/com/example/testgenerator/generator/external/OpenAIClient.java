@@ -1,7 +1,8 @@
-package com.example.testgenerator;
+package com.example.testgenerator.generator.external;
 
 import java.io.IOException;
 
+import com.example.testgenerator.generator.OpenAIResponseParser;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.json.JSONObject;
@@ -74,6 +75,7 @@ public class OpenAIClient {
             if (!response.isSuccessful()) {
                 throw new IOException("Unexpected response: " + response);
             }
+            assert response.body() != null;
             String responseBody = response.body().string();
             return OpenAIResponseParser.extractContent(responseBody);
         }

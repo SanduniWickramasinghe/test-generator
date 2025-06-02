@@ -1,4 +1,4 @@
-package com.example.testgenerator;
+package com.example.testgenerator.generator.utill;
 
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;

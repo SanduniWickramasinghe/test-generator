@@ -1,4 +1,4 @@
-package com.example.testgenerator;
+package com.example.testgenerator.generator;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

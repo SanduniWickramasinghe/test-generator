@@ -1,10 +1,10 @@
-package com.example.testgenerator;
+package com.example.testgenerator.generator;
 
+import com.example.testgenerator.generator.external.OpenAIClient;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,10 +19,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@SpringBootApplication
-public class TestgeneratorApplication {
+@AllArgsConstructor
+@Service
+public class TestGenerationService {
 
-	public static void main(String[] args) throws IOException {
+	private final TestFileWriter testFileWriter;
+
+	public void generateTestsFromOpenAPI() throws IOException {
 		String basePackage = "com.example.testgenerator.app";
 
 		try (ScanResult scanResult = new ClassGraph()
@@ -31,10 +34,12 @@ public class TestgeneratorApplication {
 				.enableAnnotationInfo()    // Enables annotation scanning (required to find @RestController, etc.)
 				.scan()) {
 
+			//Identify Controllers using classgraph
 			List<Class<?>> controllerClasses = scanResult
 					.getClassesWithAnnotation(RestController.class.getName())
 					.loadClasses();
 
+			//Identify Services using classgraph
 			List<Class<?>> serviceClasses = scanResult
 					.getClassesWithAnnotation(Service.class.getName())
 					.loadClasses();
@@ -48,31 +53,21 @@ public class TestgeneratorApplication {
 				String packagePath = clazz.getPackage().getName().replace('.', '/');
 				String filePath = "src/main/java/" + packagePath + "/" + className + ".java";
 
-				String content = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8);
+				try {
+					String content = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8);
 					String prompt = PromptBuilder.buildPromptForClass(content);
 					log.info("Prompt: {}", prompt);
 					String generatedTest = OpenAIClient.generateTestCode(prompt);
 					log.info("GeneratedTest: {}", generatedTest);
-
-				TestFileWriter.writeTestFile(clazz.getSimpleName(), generatedTest);
+					testFileWriter.writeTestFile(clazz, generatedTest);
+				}catch (IOException e){
+					log.error("Error reading or writing file for class: " + clazz.getSimpleName() + " - " + e.getMessage());
+					throw e;
+				}
 			}
-
-//			for (Class<?> clazz : classes) {
-//				List<Method> publicMethods = MethodScanner.getPublicMethods(clazz);
-//				log.info("PublicMethods in {}: {}", clazz.getSimpleName(), publicMethods);
-//
-//				List<String> generatedTestList = new ArrayList<>();
-//
-//				for (Method method : publicMethods) {
-//					String prompt = PromptBuilder.buildPrompt(method);
-//					log.info("Prompt: {}", prompt);
-//					String generatedTest = OpenAIClient.generateTestCode(prompt);
-//					log.info("GeneratedTest: {}", generatedTest);
-//					generatedTestList.add(generatedTest);
-//				}
-//
-//				TestFileWriter.writeTestFile(clazz.getSimpleName(), generatedTestList);
-//			}
+		}catch (Exception e){
+			log.error("Error during test generation: " + e.getMessage());
+			throw new RuntimeException("Error during test generation", e);
 		}
 	}
 
