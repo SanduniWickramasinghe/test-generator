@@ -1,20 +1,16 @@
 package com.example.testgenerator.app.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-@Schema(description = "Customer entity")
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
 public class Customer {
-    @Schema(description = "Customer ID", example = "101")
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Schema(description = "Customer name", example = "Alice")
     private String name;
+    private String email;
 }

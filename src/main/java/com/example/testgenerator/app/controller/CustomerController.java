@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import com.example.testgenerator.app.model.Customer;
+import com.example.testgenerator.app.dto.CustomerDto;
 import com.example.testgenerator.app.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +50,7 @@ public class CustomerController {
             @ApiResponse(responseCode = "200", description = "Successfully returned customer")
     })
     @GetMapping("/customer")
-    public Customer getCustomer() {
+    public CustomerDto getCustomer() {
         return customerService.getCustomer();
     }
 }

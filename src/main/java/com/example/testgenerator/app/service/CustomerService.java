@@ -1,6 +1,6 @@
 package com.example.testgenerator.app.service;
 
-import com.example.testgenerator.app.model.Customer;
+import com.example.testgenerator.app.dto.CustomerDto;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,8 +14,8 @@ public class CustomerService {
         return String.valueOf(number);
     }
 
-    public Customer getCustomer(){
-        return Customer.builder()
+    public CustomerDto getCustomer(){
+        return CustomerDto.builder()
                 .id(1)
                 .name("UOP User")
                 .build();

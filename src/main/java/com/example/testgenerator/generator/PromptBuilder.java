@@ -1,5 +1,8 @@
 package com.example.testgenerator.generator;
 
+import com.example.testgenerator.generator.nlp.NERProcessor;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -7,13 +10,22 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
 public class PromptBuilder {
     private static final String SRC_ROOT = "src/main/java/";
 
-    public static String buildPromptForClass(String mainClassContent) throws IOException {
+    private final NERProcessor nerProcessor;
+
+    public PromptBuilder(NERProcessor nerProcessor) {
+        this.nerProcessor = nerProcessor;
+    }
+
+    public String buildPromptForClass(String mainClassContent) throws IOException {
         StringBuilder prompt = new StringBuilder();
 
         // Append main class header
@@ -23,6 +35,16 @@ public class PromptBuilder {
                 .append("===================\n")
                 .append(mainClassContent)
                 .append("\n\n");
+
+        // Perform NER
+        Map<String, Set<String>> entities = nerProcessor.extractEntities(mainClassContent);
+
+        // Append extracted entities to the prompt
+        prompt.append("Extracted Entities:\n")
+                .append("===================\n");
+        for (Map.Entry<String, Set<String>> entry : entities.entrySet()) {
+            prompt.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+        }
 
         // Extract import statements of custom classes
         List<String> customClassPaths = extractCustomImports(mainClassContent);
