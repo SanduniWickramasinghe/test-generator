@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Generator UI</title>
+    <style>
+        #loader {
+            display: none;
+            font-style: italic;
+            color: blue;
+            margin-top: 10px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<h2>Test Generator</h2>
+
+<form id="generateForm">
+    <label for="source">Source Folder Path:</label><br>
+    <input type="text" id="source" name="source" placeholder="D:/MscProject/sample-applications/..." style="width: 500px;" required><br><br>
+    <button type="submit">Generate Tests</button>
+</form>
+
+<p id="loader">⏳ Generating tests... Please wait.</p>
+<p id="result"></p>
+
+<script>
+    document.getElementById('generateForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const source = document.getElementById('source').value;
+        const loader = document.getElementById('loader');
+        const resultEl = document.getElementById('result');
+
+        // Show loader and clear previous result
+        loader.style.display = 'block';
+        resultEl.textContent = '';
+
+        fetch(`/api/test-gen/generate?source=${encodeURIComponent(source)}`, {
+            method: 'POST'
+        })
+        .then(response => response.text())
+        .then(data => {
+            loader.style.display = 'none';
+            resultEl.textContent = data;
+            resultEl.style.color = 'green';
+        })
+        .catch(err => {
+            loader.style.display = 'none';
+            resultEl.textContent = "Failed: " + err;
+            resultEl.style.color = 'red';
+        });
+    });
+</script>
+</body>
+</html>

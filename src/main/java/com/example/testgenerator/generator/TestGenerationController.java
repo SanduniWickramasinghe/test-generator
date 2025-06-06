@@ -11,9 +11,9 @@ public class TestGenerationController {
     private final TestGenerationService testGenerationService;
 
     @PostMapping("/generate")
-    public String generateTests() {
+    public String generateTests(@RequestParam("source") String source) {
         try {
-            testGenerationService.generateTestsFromOpenAPI();
+            testGenerationService.generateTestsFromOpenAPI(source);
             return "Test generation completed.";
         } catch (Exception e) {
             return "Test generation failed: " + e.getMessage();

@@ -107,7 +107,7 @@ public class PromptBuilder {
     }
 
 
-    public static String buildRefactorPrompt(String content, Class<?> clazz) {
+    public static String buildRefactorPrompt(String content, String originalClassFile) {
 
         return "You are a Java expert. Refactor the following Java class source code:\n"
                 + "- Ensure proper import statements, no duplicates, and no unused imports.\n"
@@ -117,8 +117,8 @@ public class PromptBuilder {
                 + "- Provide the fully formatted Java class code only, without explanations or comments " +
                 "or any aditional characters which give compile errors.\n\n"
                 + content +
-                "\n\nThe following is the referenced class with their package names. Include these properly in imports:\n" +
-                "- " + clazz + "\n";
+                "\n\nThe following is the referenced class with their package names. Include these properly in imports. Specially include the correct package name:\n" +
+                "- " + originalClassFile + "\n";
     }
 
 }
