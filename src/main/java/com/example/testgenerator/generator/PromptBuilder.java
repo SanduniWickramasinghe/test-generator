@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 
 @Service
 public class PromptBuilder {
-    private static final String SRC_ROOT = "src/main/java/";
 
     private final NERProcessor nerProcessor;
 
@@ -25,7 +24,7 @@ public class PromptBuilder {
         this.nerProcessor = nerProcessor;
     }
 
-    public String buildPromptForClass(String mainClassContent) throws IOException {
+    public String buildPromptForClass(String mainClassContent, String sourceRoot) throws IOException {
         StringBuilder prompt = new StringBuilder();
 
         // Append main class header
@@ -51,7 +50,7 @@ public class PromptBuilder {
 
         // Load each custom class source and append to prompt
         for (String classPath : customClassPaths) {
-            String classSource = loadClassSource(classPath);
+            String classSource = loadClassSource(classPath, sourceRoot + "\\");
             if (classSource != null) {
                 prompt.append("Related Model Class:\n")
                         .append("===================\n")
@@ -95,8 +94,8 @@ public class PromptBuilder {
      * @return source code as string, or null if file not found
      * @throws IOException
      */
-    private static String loadClassSource(String fullyQualifiedClassName) throws IOException {
-        String path = SRC_ROOT + fullyQualifiedClassName.replace('.', '/') + ".java";
+    private static String loadClassSource(String fullyQualifiedClassName, String sourceRoot) throws IOException {
+        String path = sourceRoot + fullyQualifiedClassName.replace('.', '/') + ".java";
         Path classFilePath = Paths.get(path);
         if (Files.exists(classFilePath)) {
             return Files.readString(classFilePath, StandardCharsets.UTF_8);

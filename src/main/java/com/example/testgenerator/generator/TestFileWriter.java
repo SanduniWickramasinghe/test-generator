@@ -12,8 +12,6 @@ import java.io.IOException;
 @Service
 public class TestFileWriter {
 
-    //private static final String PACKAGE_LINE = "package com.example.testgenerator;\n\n";
-
     public void writeTestFile( String testMethodContents, String directoryPath) throws IOException {
         File directory = new File(directoryPath);
         if (!directory.exists()) {
@@ -29,9 +27,6 @@ public class TestFileWriter {
         }
 
         StringBuilder contentBuilder = new StringBuilder();
-
-        // Append package and import statements
-        //contentBuilder.append(PACKAGE_LINE);
         contentBuilder.append(testMethodContents);
 
         contentBuilder.append("}");
