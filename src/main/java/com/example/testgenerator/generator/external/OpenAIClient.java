@@ -10,8 +10,7 @@ import org.json.JSONObject;
 @Slf4j
 public class OpenAIClient {
 
-    private static final String API_KEY = "sample-key"; //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
-
+    private static final String API_KEY = "sample-key";
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
 
     public static String generateTestCode(String prompt) throws IOException {
