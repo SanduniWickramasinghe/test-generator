@@ -39,8 +39,7 @@ public class PromptBuilder {
         Map<String, Set<String>> entities = nerProcessor.extractEntities(mainClassContent);
 
         // Append extracted entities to the prompt
-        prompt.append("Extracted Entities:\n")
-                .append("===================\n");
+        prompt.append("Extracted Entities:\n").append("===================\n");
         for (Map.Entry<String, Set<String>> entry : entities.entrySet()) {
             prompt.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
         }
@@ -58,7 +57,6 @@ public class PromptBuilder {
                         .append("\n\n");
             }
         }
-
         return prompt.toString();
     }
 
