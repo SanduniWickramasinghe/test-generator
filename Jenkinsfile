@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        jdk 'Java 21'           // Make sure "Java 21" is configured under Jenkins -> Global Tool Configuration
+        jdk 'Java21'           // Make sure "Java 21" is configured under Jenkins -> Global Tool Configuration
         gradle 'Gradle 8.5'     // Also ensure "Gradle 8.5" (or your version) is configured
     }
 
